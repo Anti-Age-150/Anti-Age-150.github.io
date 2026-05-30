@@ -45,7 +45,7 @@ async function submitWaitlist(form, status) {
   }
 
   try {
-    localStorage.setItem("go150-waitlist", JSON.stringify({ ...payload, submittedAt: new Date().toISOString() }));
+    localStorage.setItem("go160-waitlist", JSON.stringify({ ...payload, submittedAt: new Date().toISOString() }));
     if (status) {
       status.textContent = "Saved locally. Connect WAITLIST_ENDPOINT in site.js to send submissions.";
     }
