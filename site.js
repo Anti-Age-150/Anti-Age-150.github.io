@@ -22,9 +22,20 @@ function setupMobileNav() {
   });
 }
 
-async function submitWaitlist(form, status) {
+function getWaitlistPayload(form) {
   const formData = new FormData(form);
-  const payload = Object.fromEntries(formData.entries());
+  return {
+    ...Object.fromEntries(formData.entries()),
+    language: form.dataset.language || document.documentElement.lang || "en",
+    sourcePage: window.location.pathname || "/",
+    submittedAt: new Date().toISOString(),
+  };
+}
+
+async function submitWaitlist(form, status) {
+  const payload = getWaitlistPayload(form);
+  const successMessage = form.dataset.success || "Submitted successfully.";
+  const localSuccessMessage = form.dataset.localSuccess || successMessage;
 
   if (WAITLIST_ENDPOINT) {
     const response = await fetch(WAITLIST_ENDPOINT, {
@@ -34,25 +45,29 @@ async function submitWaitlist(form, status) {
     });
 
     if (!response.ok) {
-      throw new Error("Waitlist submission failed.");
+      throw new Error(form.dataset.error || "Unable to submit right now.");
     }
 
     if (status) {
-      status.textContent = "Submitted successfully.";
+      status.textContent = successMessage;
     }
 
     return;
   }
 
+  let existing = [];
   try {
-    localStorage.setItem("go160-waitlist", JSON.stringify({ ...payload, submittedAt: new Date().toISOString() }));
-    if (status) {
-      status.textContent = "Saved locally. Connect WAITLIST_ENDPOINT in site.js to send submissions.";
-    }
+    existing = JSON.parse(localStorage.getItem("go160-waitlist") || "[]");
   } catch {
-    if (status) {
-      status.textContent = "Saved in memory for this session. Local storage is unavailable.";
-    }
+    existing = [];
+  }
+
+  const submissions = Array.isArray(existing) ? existing : [existing];
+  submissions.push(payload);
+  localStorage.setItem("go160-waitlist", JSON.stringify(submissions));
+
+  if (status) {
+    status.textContent = localSuccessMessage;
   }
 }
 
@@ -62,43 +77,56 @@ function setupWaitlistForm() {
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const status = document.querySelector("[data-form-status]");
+    const status = form.querySelector("[data-form-status]");
+    const submitButton = form.querySelector('button[type="submit"]');
+
+    if (status) {
+      status.textContent = "";
+    }
+
+    if (submitButton) {
+      submitButton.disabled = true;
+    }
 
     try {
       await submitWaitlist(form, status);
       form.reset();
     } catch (error) {
       if (status) {
-        status.textContent = error instanceof Error ? error.message : "Unable to submit form.";
+        status.textContent = error instanceof Error ? error.message : form.dataset.error || "Unable to submit right now.";
+      }
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
       }
     }
   });
 }
 
-function setupHeroFullscreen() {
-  const shell = document.querySelector("[data-fullscreen-target]");
-  const button = document.querySelector("[data-fullscreen-button]");
-  const video = shell?.querySelector("video");
+function setupOutlookVideo() {
+  const shell = document.querySelector("[data-outlook-shell]");
+  const button = document.querySelector("[data-outlook-fullscreen]");
+  const video = document.querySelector("[data-outlook-video]");
 
   if (!shell || !button || !video) return;
 
   button.addEventListener("click", async () => {
-    if (document.fullscreenElement) {
-      await document.exitFullscreen();
-      return;
+    try {
+      if (shell.requestFullscreen && document.fullscreenElement !== shell) {
+        await shell.requestFullscreen();
+      }
+    } catch {
+      // Fullscreen is optional; playback still proceeds.
     }
 
-    if (shell.requestFullscreen) {
-      await shell.requestFullscreen();
-      return;
-    }
-
-    if (video.webkitEnterFullscreen) {
-      video.webkitEnterFullscreen();
+    try {
+      await video.play();
+    } catch {
+      // Some browsers block playback until the user taps the player controls.
     }
   });
 }
 
 setupMobileNav();
 setupWaitlistForm();
-setupHeroFullscreen();
+setupOutlookVideo();
