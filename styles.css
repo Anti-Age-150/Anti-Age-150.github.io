@@ -259,10 +259,11 @@ h3 {
 
 .eyebrow {
   margin: 0 0 18px;
-  color: var(--accent);
+  color: #06101c;
   text-transform: uppercase;
   letter-spacing: 0.24em;
   font-size: 0.76rem;
+  font-weight: 700;
 }
 
 .lede {
@@ -376,10 +377,11 @@ h3 {
 }
 
 .panel-label {
-  color: var(--soft);
+  color: #06101c;
   text-transform: uppercase;
   letter-spacing: 0.2em;
   font-size: 0.74rem;
+  font-weight: 700;
 }
 
 .panel-stat {
@@ -467,10 +469,11 @@ h3 {
 .metric-label {
   display: inline-block;
   margin-bottom: 18px;
-  color: var(--accent);
+  color: #06101c;
   text-transform: uppercase;
   letter-spacing: 0.22em;
   font-size: 0.72rem;
+  font-weight: 700;
 }
 
 .metric-card h2,
