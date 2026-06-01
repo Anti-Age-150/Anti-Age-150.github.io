@@ -554,14 +554,23 @@ body.home-page .cta-banner {
 }
 
 .cta-banner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
+  display: grid;
+  gap: 18px;
   padding: 28px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--graphite);
+}
+
+.cta-banner-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.cta-banner-top .button {
+  flex: 0 0 auto;
 }
 
 .cta-banner h2,
@@ -571,6 +580,50 @@ body.home-page .cta-banner {
 
 .cta-banner .eyebrow {
   color: #9dd8cf;
+}
+
+.cta-comments {
+  display: grid;
+  gap: 16px;
+  padding: 20px 22px;
+  border: 1px solid rgba(216, 225, 222, 0.72);
+  border-radius: calc(var(--radius) + 6px);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.cta-comments h3 {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+}
+
+.cta-comments p {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.cta-comments-copy .eyebrow {
+  margin-bottom: 10px;
+}
+
+.giscus {
+  min-height: 100px;
+}
+
+.giscus-frame {
+  border-radius: 18px;
+}
+
+.comment-placeholder {
+  margin: 0;
+  padding: 16px 18px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 18px;
+  background: #f3f7f6;
+  color: var(--muted);
 }
 
 .site-footer {
@@ -699,7 +752,7 @@ body.home-page .cta-banner {
     justify-self: stretch;
   }
 
-  .cta-banner,
+  .cta-banner-top,
   .site-footer {
     flex-direction: column;
     align-items: flex-start;
@@ -805,6 +858,10 @@ body.home-page .cta-banner {
   .source-actions,
   .button,
   .cta-banner .button {
+    width: 100%;
+  }
+
+  .cta-banner-top .button {
     width: 100%;
   }
 }

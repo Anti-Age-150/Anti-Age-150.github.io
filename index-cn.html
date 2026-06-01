@@ -28,6 +28,21 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <script>
+      window.GO160_GISCUS = {
+        repo: "Anti-Age-150/Anti-Age-150.github.io",
+        repoId: "R_kgDOSsYh8g",
+        category: "General",
+        categoryId: "DIC_kwDOSsYh8s4C-P5f",
+        mapping: "pathname",
+        strict: 0,
+        reactionsEnabled: 1,
+        emitMetadata: 0,
+        inputPosition: "bottom",
+        theme: "preferred_color_scheme",
+        lang: "zh-CN",
+      };
+    </script>
     <script defer src="site.js"></script>
   </head>
   <body class="home-page">
@@ -162,12 +177,23 @@
           </aside>
         </section>
 
-        <section class="section cta-banner">
-          <div>
-            <p class="eyebrow">加入候补名单</p>
-            <h2>随着 Go160 的研究叙事发展，获取审慎更新。</h2>
+        <section class="section cta-banner" aria-labelledby="waitlist-title">
+          <div class="cta-banner-top">
+            <div>
+              <p class="eyebrow">加入候补名单</p>
+              <h2 id="waitlist-title">随着 Go160 的研究叙事发展，获取审慎更新。</h2>
+            </div>
+            <a class="button button-primary" href="join-cn.html">加入候补名单</a>
           </div>
-          <a class="button button-primary" href="join-cn.html">加入候补名单</a>
+
+          <div class="cta-comments" aria-labelledby="comments-title">
+            <div class="cta-comments-copy">
+              <p class="eyebrow">轻量反馈</p>
+              <h3 id="comments-title">留下简短想法、建议或问题即可。</h3>
+              <p>通过 Giscus 提供轻量反馈。</p>
+            </div>
+            <div class="giscus"></div>
+          </div>
         </section>
       </main>
 
