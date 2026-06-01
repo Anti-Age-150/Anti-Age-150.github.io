@@ -1,4 +1,7 @@
 const WAITLIST_ENDPOINT = null;
+const GISCUS_SCRIPT_SRC = "https://giscus.app/client.js";
+const GISCUS_FALLBACK_MESSAGE =
+  "Comments are available once Giscus is configured with a GitHub Discussions repository.";
 
 function setupMobileNav() {
   const toggle = document.querySelector(".nav-toggle");
@@ -127,6 +130,67 @@ function setupOutlookVideo() {
   });
 }
 
+function getGiscusConfig(mount) {
+  const config = window.GO160_GISCUS || {};
+  return {
+    repo: config.repo || mount.dataset.giscusRepo || "",
+    repoId: config.repoId || mount.dataset.giscusRepoId || "",
+    category: config.category || mount.dataset.giscusCategory || "",
+    categoryId: config.categoryId || mount.dataset.giscusCategoryId || "",
+    mapping: config.mapping || mount.dataset.giscusMapping || "pathname",
+    strict: config.strict ?? mount.dataset.giscusStrict ?? 0,
+    reactionsEnabled: config.reactionsEnabled ?? mount.dataset.giscusReactionsEnabled ?? 1,
+    emitMetadata: config.emitMetadata ?? mount.dataset.giscusEmitMetadata ?? 0,
+    inputPosition: config.inputPosition || mount.dataset.giscusInputPosition || "bottom",
+    theme: config.theme || mount.dataset.giscusTheme || "preferred_color_scheme",
+    lang:
+      config.lang ||
+      mount.dataset.giscusLang ||
+      (document.documentElement.lang === "zh-Hans" ? "zh-CN" : "en"),
+  };
+}
+
+function setupComments() {
+  const mount = document.querySelector(".giscus");
+
+  if (!mount) {
+    return;
+  }
+
+  const config = getGiscusConfig(mount);
+  const isConfigured = Boolean(config.repo && config.repoId && config.category && config.categoryId);
+
+  if (!isConfigured) {
+    mount.innerHTML = `<p class="comment-placeholder">${GISCUS_FALLBACK_MESSAGE}</p>`;
+    return;
+  }
+
+  if (mount.querySelector("iframe")) {
+    return;
+  }
+
+  mount.textContent = "";
+
+  const script = document.createElement("script");
+  script.src = GISCUS_SCRIPT_SRC;
+  script.setAttribute("data-repo", config.repo);
+  script.setAttribute("data-repo-id", config.repoId);
+  script.setAttribute("data-category", config.category);
+  script.setAttribute("data-category-id", config.categoryId);
+  script.setAttribute("data-mapping", config.mapping);
+  script.setAttribute("data-strict", String(config.strict));
+  script.setAttribute("data-reactions-enabled", String(config.reactionsEnabled));
+  script.setAttribute("data-emit-metadata", String(config.emitMetadata));
+  script.setAttribute("data-input-position", config.inputPosition);
+  script.setAttribute("data-theme", config.theme);
+  script.setAttribute("data-lang", config.lang);
+  script.setAttribute("crossorigin", "anonymous");
+  script.async = true;
+
+  mount.appendChild(script);
+}
+
 setupMobileNav();
 setupWaitlistForm();
 setupOutlookVideo();
+setupComments();
