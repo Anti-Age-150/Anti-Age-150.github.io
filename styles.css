@@ -554,14 +554,23 @@ body.home-page .cta-banner {
 }
 
 .cta-banner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
+  display: grid;
+  gap: 18px;
   padding: 28px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--graphite);
+}
+
+.cta-banner-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.cta-banner-top .button {
+  flex: 0 0 auto;
 }
 
 .cta-banner h2,
@@ -571,6 +580,61 @@ body.home-page .cta-banner {
 
 .cta-banner .eyebrow {
   color: #9dd8cf;
+}
+
+.cta-comments {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border: 1px solid rgba(216, 225, 222, 0.72);
+  border-radius: calc(var(--radius) + 6px);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.cta-comments h3 {
+  margin-bottom: 8px;
+  color: var(--ink);
+  font-size: 1.28rem;
+}
+
+.cta-comments p {
+  color: var(--muted);
+}
+
+.comment {
+  min-height: 84px;
+}
+
+.comment-placeholder {
+  margin: 0;
+  padding: 16px 18px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 18px;
+  background: #f3f7f6;
+  color: var(--muted);
+}
+
+#vcomment .vpower {
+  display: none;
+}
+
+#vcomment .vwrap {
+  border-radius: 18px;
+}
+
+#vcomment .vwrap,
+#vcomment .vbtn {
+  box-shadow: none;
+}
+
+#vcomment .vinput,
+#vcomment .veditor {
+  border-radius: 14px;
+}
+
+#vcomment .vbtn {
+  border-radius: 999px;
 }
 
 .site-footer {
@@ -699,7 +763,7 @@ body.home-page .cta-banner {
     justify-self: stretch;
   }
 
-  .cta-banner,
+  .cta-banner-top,
   .site-footer {
     flex-direction: column;
     align-items: flex-start;
@@ -805,6 +869,10 @@ body.home-page .cta-banner {
   .source-actions,
   .button,
   .cta-banner .button {
+    width: 100%;
+  }
+
+  .cta-banner-top .button {
     width: 100%;
   }
 }

@@ -1,4 +1,6 @@
 const WAITLIST_ENDPOINT = null;
+const VALINE_FALLBACK_MESSAGE =
+  "Comments are available once Valine is configured with LeanCloud credentials.";
 
 function setupMobileNav() {
   const toggle = document.querySelector(".nav-toggle");
@@ -127,6 +129,41 @@ function setupOutlookVideo() {
   });
 }
 
+function setupComments() {
+  const mount = document.querySelector("#vcomment.comment");
+
+  if (!mount) {
+    return;
+  }
+
+  const commentConfig = window.GO160_VALINE || {};
+  const appId = commentConfig.appId || mount.dataset.valineAppId || "";
+  const appKey = commentConfig.appKey || mount.dataset.valineAppKey || "";
+
+  if (!window.Valine || !appId || !appKey) {
+    mount.innerHTML = `<p class="comment-placeholder">${VALINE_FALLBACK_MESSAGE}</p>`;
+    return;
+  }
+
+  new window.Valine({
+    el: "#vcomment",
+    path: window.location.pathname,
+    appId,
+    appKey,
+    placeholder:
+      commentConfig.placeholder ||
+      mount.dataset.valinePlaceholder ||
+      "Share a thought, question, or suggestion.",
+    notify: commentConfig.notify ?? false,
+    verify: commentConfig.verify ?? false,
+    enableQQ: commentConfig.enableQQ ?? true,
+    recordIP: commentConfig.recordIP ?? false,
+    pageSize: commentConfig.pageSize ?? 10,
+    avatar: commentConfig.avatar ?? "retro",
+  });
+}
+
 setupMobileNav();
 setupWaitlistForm();
 setupOutlookVideo();
+setupComments();
